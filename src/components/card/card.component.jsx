@@ -1,15 +1,19 @@
 import './card.styles.css';
+import Divider from '@mui/material/Divider';
 
-const Card = ({ monster }) => {
-    const { name, email, id } = monster;
+const Card = ({ monster, cardId }) => {
+    const { name, powers, imageLink} = monster;
     return (
-        <div className='card-container' key={id}>
+        <div className='card-container' key={cardId}>
             <img 
                 alt={`monster ${name}`}
-                src={`https://robohash.org/${id}?set=set2&size=180x180`}
+                src={imageLink}
             />
-            <h2>{name}</h2>
-            <p>{email}</p>
+            <Divider variant="middle" className='card-divider' />
+            <div className='card-details'>
+                <div><span className='card-details-label'>Name: </span>{name}</div>
+                <div><span className='card-details-label'>Powers: </span>{powers}</div> 
+            </div>
         </div>
     );
 };

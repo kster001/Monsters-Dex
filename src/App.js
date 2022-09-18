@@ -1,20 +1,44 @@
-//import { Component } from 'react';
-import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useState, useEffect, Fragment } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getDataFromDB } from './firebase/firestore';
+import { populateMonsters } from "./store/monster/monster.action";
+import { getMonsters } from './store/monster/monster.selector';
+import Navigation from './components/navigation/navigation.component';
+import Add from './components/add-monster/add-monster.component';
 import CardList from './components/card-list/card-list.component'
 import SearchBox from './components/search-box/search-box.component';
 import './App.css';
 
+
 const App = () => {
-  const [searchValue, setSearchValue] = useState('');
-  const [monsters, setMonsters] = useState([]);
-  const [ filteredMonsters , setFilteredMonsters ] = useState(monsters);
-  
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/users')
-    .then(response => response.json())
-    .then(users => setMonsters(users));
-  }, []);
-   
+    getDataFromDB().then((monsters) => {
+      dispatch(populateMonsters(monsters));
+    });
+    
+  }, [])
+
+  return (
+    <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Navigation />}> 
+            <Route index element={<Home />} />
+            <Route path="/add" element={<Add />} />
+          </Route>
+        </Routes>
+    </BrowserRouter>
+  );
+
+}
+
+const Home = () => {
+  const monsters = useSelector(getMonsters);
+  const [searchValue, setSearchValue] = useState('');
+  const [ filteredMonsters , setFilteredMonsters ] = useState(monsters);
+
   useEffect(() => {
     const newFilteredMonsters = monsters.filter((monster) => {
       return monster.name.toLowerCase().includes(searchValue);
@@ -28,15 +52,12 @@ const App = () => {
   };
 
   return (
-    <div className="App">
-      <h1 className='app-title'>Monsters PersonalDex</h1>
-      <SearchBox onChangeHandler={onSearchChange} className="search-box" placeholder="search monsters"/>
+    <Fragment>
+      <SearchBox onChangeHandler={onSearchChange} className="search-box" placeholder="Find Character"/>
       <CardList monsters = { filteredMonsters }/>
-    </div>
-
+    </Fragment>
   );
-
-}
+};
 
 // class App extends Component {
 

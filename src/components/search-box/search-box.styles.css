@@ -1,9 +1,13 @@
 .search-box {
-  -webkit-appearance: none;
-  border: none;
-  outline: none;
-  padding: 10px;
-  width: 150px;
-  line-height: 30px;
+  position: relative;
+  top: 1em;
+  right: 42.5%;
+  /* padding: 15px; */
   margin-bottom: 30px;
+  width: 150px;
+ 
+}
+
+.MuiInput-input {
+  color: #fff !important;
 }
