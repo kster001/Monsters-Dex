@@ -1,7 +1,6 @@
 import { Fragment, useState, useRef} from "react";
 import { useDispatch } from "react-redux";
-import { styled } from '@mui/material/styles';
-import { makeStyles } from "@mui/styles";
+import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -29,13 +28,17 @@ const ValidationTextField = styled(TextField)({
     },
   });
 
-
-const useStyles = makeStyles({
-    input: {
-      color: "white"
-    }
-});
-
+  const theme = createTheme({
+    components: {
+      MuiInputBase: {
+        styleOverrides: {
+          root: {
+            color: 'white'
+          },
+        },
+      },
+    },
+  });
 
 const Add = () => {
     const dispatch = useDispatch();
@@ -44,7 +47,6 @@ const Add = () => {
     const imageLink = useRef('');
     const [ isAdding, setIsAdding ] = useState(false);
     // const [ AddSuccess, setAddSuccess ] = useState(false);
-    const classes = useStyles();
 
     const handleClick = async () => {
         setIsAdding(true);
@@ -75,42 +77,44 @@ const Add = () => {
                 alignItems="center"
             >
                 <table>
-                    <tbody>
-                        <tr>
-                            <td className="add-monster-label">Name: </td>
-                            <td>
-                                <ValidationTextField
-                                    variant="outlined"
-                                    id="validation-outlined-input"
-                                    inputRef={name}
-                                    inputProps={{ className: classes.input }}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="add-monster-label">Power(s): </td>
-                            <td>
-                                <ValidationTextField
-                                    variant="outlined"
-                                    id="validation-outlined-input"
-                                    inputRef={powers}
-                                    inputProps={{ className: classes.input }}
-                                />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="add-monster-label">imageLink: </td>
-                            <td>
-                                <ValidationTextField
-                                    variant="outlined"
-                                    id="validation-outlined-input"
-                                    inputRef={imageLink}
-                                    inputProps={{ className: classes.input }}
-                                />
-                            </td>
-                        </tr>
-                    </tbody>
+                    <ThemeProvider theme={theme}>
+                        <tbody>
+                            <tr>
+                                <td className="add-monster-label">Name: </td>
+                            
+                                    <td>
+                                        <ValidationTextField
+                                            variant="outlined"
+                                            id="validation-outlined-input"
+                                            inputRef={name}
+                                        />
+                                    </td>
+                                
+                            </tr>
+                            <tr>
+                                <td className="add-monster-label">Power(s): </td>
+                                <td>
+                                    <ValidationTextField
+                                        variant="outlined"
+                                        id="validation-outlined-input"
+                                        inputRef={powers}
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="add-monster-label">imageLink: </td>
+                                <td>
+                                    <ValidationTextField
+                                        variant="outlined"
+                                        id="validation-outlined-input"
+                                        inputRef={imageLink}
+                                    />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </ThemeProvider>
                 </table>
+             
                 <div className="add-field">
                     <Button 
                         variant="contained"
