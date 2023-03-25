@@ -5,9 +5,10 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Swal from 'sweetalert2';
-import { addNewMonster } from "../../store/monster/monster.action";
+import { addNewMonster } from "../../store/monster.action";
 import { insertDataToDB } from "../../firebase/firestore";
 import "./add-monster.styles.css";
+import { Monster } from "../../utils/types.utils";
 
 const ValidationTextField = styled(TextField)({
     '& input:valid + fieldset': {
@@ -42,18 +43,18 @@ const ValidationTextField = styled(TextField)({
 
 const Add = () => {
     const dispatch = useDispatch();
-    const name = useRef('');
-    const powers = useRef('');
-    const imageLink = useRef('');
+    const name = useRef<HTMLInputElement>(null);
+    const powers = useRef<HTMLInputElement>(null);
+    const imageLink = useRef<HTMLInputElement>(null);
     const [ isAdding, setIsAdding ] = useState(false);
     // const [ AddSuccess, setAddSuccess ] = useState(false);
 
     const handleClick = async () => {
         setIsAdding(true);
-        const monster = {
-            name: name.current.value,
-            powers: powers.current.value,
-            imageLink: imageLink.current.value
+        const monster: Monster  = {
+            name: name.current ? name.current.value : "Untitled",
+            powers: powers.current ? powers.current.value : "",
+            imageLink: imageLink.current ? imageLink.current.value: ""
         }
         dispatch(addNewMonster(monster));
         await insertDataToDB(monster);
@@ -61,7 +62,7 @@ const Add = () => {
         Swal.fire({
             icon: 'success',
             iconColor: '#1EB980',
-            title: `Monster (${name.current.value}) Added successfully`,
+            title: `Monster (${name.current?.value}) Added successfully`,
             showConfirmButton: false,
             timer: 3000
         })

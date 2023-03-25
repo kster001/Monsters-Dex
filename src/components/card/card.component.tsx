@@ -1,12 +1,18 @@
+import { Monster } from '../../utils/types.utils';
 import './card.styles.css';
 import Divider from '@mui/material/Divider';
 
-const Card = ({ monster, cardId }) => {
+type CardProps = {
+    monster: Monster;
+    cardId: number;
+}
+
+const Card = ({ monster, cardId }: CardProps): JSX.Element => {
     const { name, powers, imageLink} = monster;
     return (
         <div className='card-container' key={cardId}>
             <img 
-                alt={`monster ${name}`}
+                alt={name}
                 src={imageLink}
             />
             <Divider variant="middle" className='card-divider' />
